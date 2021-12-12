@@ -1,0 +1,51 @@
+import pygame
+from pygame.math import Vector2
+
+pygame.init()
+prozor = pygame.display.set_mode((1920, 1080))
+sat = pygame.time.Clock()
+
+slike = []
+
+nova_slika = pygame.image.load("mis1.png")
+transformisana_slika = pygame.transform.scale(nova_slika, (200, 200))
+slike.append(transformisana_slika)
+
+nova_slika = pygame.image.load("mis2.png")
+transformisana_slika = pygame.transform.scale(nova_slika, (200, 200))
+slike.append(transformisana_slika)
+
+
+class Mis:
+    broj_slike = 0
+    pozicija = None
+    brzina = None
+
+
+m = Mis()
+m.pozicija = Vector2(50, 50)
+m.brzina = Vector2(20, 7)
+
+radi = True
+while radi:
+    for dogadjaj in pygame.event.get():
+        if dogadjaj.type == pygame.QUIT:
+            radi = False
+
+    prozor.fill((0, 0, 0))
+    # m.pozicija.x
+    if m.pozicija.x >= 1700 or m.pozicija.x <= 0:
+        m.brzina.x = -m.brzina.x
+    if m.pozicija.y >= 980 or m.pozicija.y <= 0:
+        m.brzina.y = -m.brzina.y
+
+
+
+    prozor.blit(slike[m.broj_slike], m.pozicija)
+    m.pozicija += m.brzina
+
+    m.broj_slike = (m.broj_slike + 1) % 2
+
+    pygame.display.flip()
+    sat.tick(10)
+pygame.quit()
