@@ -1,0 +1,41 @@
+import random
+from pygame.math import Vector2
+import pygame
+
+SIRINA = 800
+VISINA = 600
+prozor = pygame.display.set_mode((SIRINA, VISINA))
+pygame.display.set_caption("random")
+
+class Pahuljica:
+    brzina = None
+    pozicija = None
+
+clock = pygame.time.Clock()
+
+sl_pahuljica = pygame.image.load("pahuljica.png")
+sl_pahuljica = pygame.transform.scale(sl_pahuljica, (30, 30))
+
+pahuljice = []
+for i in range(10):
+    x = random.randint(0, SIRINA-20)
+    y = random.randint(0, VISINA-20)
+    m = Pahuljica()
+    m.pozicija = Vector2(x, y)
+    m.brzina = Vector2(10, 7)
+    pahuljice.append(m)
+
+program_radi = True
+while program_radi:
+    for dogadjaj in pygame.event.get():
+        if dogadjaj.type == pygame.QUIT:
+            program_radi = False
+
+    prozor.fill(pygame.Color("black"))
+    # m.pozicija.y += m.brzina.y
+    for p in pahuljice:
+        p.pozicija += p.brzina
+        prozor.blit(sl_pahuljica, p.pozicija)
+    pygame.display.flip()
+    clock.tick(10)
+
