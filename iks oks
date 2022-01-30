@@ -1,0 +1,34 @@
+import pygame
+from pygame import mouse
+
+ekran = pygame.display.set_mode((600 , 600))
+
+
+
+ekran.fill(pygame.Color("white"))
+radi = True
+while radi:
+    for dogadjaj in pygame.event.get():
+        if dogadjaj.type == pygame.QUIT:
+            radi = False
+        if dogadjaj.type == pygame.MOUSEBUTTONDOWN:
+            x, y = dogadjaj.pos
+            x = x//200
+            y = y//200
+            print(x , y)
+            
+                
+    mis = mouse.get_pos()
+    # Crtam tabelu 3 x 3
+    pygame.draw.line(ekran , pygame.Color("black") , (200,0) , (200 , 600) , 10)
+    pygame.draw.line(ekran, pygame.Color("black"), (400, 0), (400, 600), 10)
+    pygame.draw.line(ekran, pygame.Color("black"), (0, 200), (600, 200), 10)
+    pygame.draw.line(ekran, pygame.Color("black"), (0, 400), (600 ,400 ), 10)
+    # Zavrsavam
+
+
+
+
+
+
+    pygame.display.flip()
