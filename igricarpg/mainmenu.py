@@ -1,7 +1,8 @@
 import random
 
+import pygame
 import pygame.math as math
-from igrac import *
+
 from UI import *
 from tutfiles import *
 from items import *
@@ -74,7 +75,7 @@ while program_radi:
     if dugmici[pygame.K_ESCAPE]:
         pygame.quit()
         program_radi = False
-        
+    #INVENTORY
 
     prozor.fill((0, 0, 0))
     if trenutni_ekran == "mainmenu" or trenutni_ekran== "settings":
@@ -94,22 +95,39 @@ while program_radi:
         prozor.blit(open_tutorial_chest.header , (433, 99))
         prozor.blit(tutorial_chest.slika, (tutorial_chest.pozicija))
         prozor.blit(igrac.trenutna_slika , (igrac.pozicija))
-        if dugmici[pygame.K_b]:
+        if dugmici[pygame.K_TAB]:
             pygame.draw.rect(prozor ,pygame.Color("lime"), (50,50 , 700,500))
-            if open_tutorial_chest.uradjen == False:
+            if open_tutorial_chest.uradjen == False and broj_objectiva == 1:
                 prozor.blit(open_tutorial_chest.ime , (50,50))
+            if broj_objectiva == 2:
+                prozor.blit(equip_wooden_wand.ime , (50,50))
         if crtaj_dugmice_tutorial == True and open_tutorial_chest.uradjen == False:
             prozor.blit(tutorial_text , (0,0))
         pygame.time.wait(100)
         if abs(igrac.pozicija.x - tutorial_chest.pozicija.x) <= tutorial_chest.slika.get_width() and abs(igrac.pozicija.y - tutorial_chest.pozicija.y) < tutorial_chest.slika.get_height():
             tutorial_chest.opened = True
+        if abs(igrac.pozicija.x - basic_wooden_wand.pozicija.x) <= tutorial_chest.slika.get_width() and abs(igrac.pozicija.y - tutorial_chest.pozicija.y) < tutorial_chest.slika.get_height() and basic_wooden_wand.crtaj == True:
+            basic_wooden_wand.crtaj = False
+            igrac.ima_oruzje = True
+            igrac.inventory.append("basic_wooden_wand")
+            broj_objectiva += 1
+
+        if dugmici[pygame.K_1] and igrac.ima_oruzje == True:
             igrac.trenutno_oruzje = basic_wooden_wand.slika
+            broj_objectiva += 1
+
+        if igrac.trenutno_oruzje == basic_wooden_wand.slika:
+            prozor.blit(basic_wooden_wand.slika, igrac.pozicija)
+
         if dugmici[pygame.K_SPACE] and igrac.mana >= 10  :
             igrac.bullets.append(
                 [igrac.pozicija + Vector2(0, 0).rotate(igrac.pravac), igrac.pravac])
            # igrac.bullets.append([igrac.pozicija + Vector2(0, 0).rotate(igrac.pravac),Vector2(10, 0).rotate(igrac.pravac)])
             igrac.mana -= basic_wooden_wand.reqmana
-            print(igrac.mana)
+        if igrac.ima_oruzje == True:
+            prozor.blit(pokupio_prvo_oruzje_text, (0, 0))
+
+
 
 
 
@@ -119,8 +137,10 @@ while program_radi:
     if tutorial_chest.opened == True:
         tutorial_chest.slika = pygame.image.load("chest_opened-removebg-preview.png")
         tutorial_chest.slika = pygame.transform.scale(tutorial_chest.slika, (100, 100))
-        prozor.blit(basic_wooden_wand.slika, (tutorial_chest.pozicija.x + 150, tutorial_chest.pozicija.y))
+        if basic_wooden_wand.crtaj == True and igrac.ima_oruzje == False:
+            prozor.blit(basic_wooden_wand.slika, (basic_wooden_wand.pozicija))
         open_tutorial_chest.uradjen = True
+
     pygame.display.flip()
     sat.tick(30)
 
